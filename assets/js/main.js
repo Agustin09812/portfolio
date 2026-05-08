@@ -141,6 +141,46 @@
   });
 
   /**
+   * Make portfolio cards fully clickable
+   */
+  function initPortfolioCards() {
+    document.querySelectorAll('.portfolio .portfolio-card').forEach((card) => {
+      const triggerLink = card.querySelector('.card-image a[href]');
+      if (!triggerLink) return;
+
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+
+      const openCard = () => {
+        if (triggerLink.classList.contains('glightbox')) {
+          triggerLink.click();
+          return;
+        }
+        const href = triggerLink.getAttribute('href');
+        if (!href) return;
+        if (triggerLink.getAttribute('target') === '_blank') {
+          window.open(href, '_blank', 'noopener,noreferrer');
+        } else {
+          window.location.href = href;
+        }
+      };
+
+      card.addEventListener('click', (event) => {
+        if (event.target.closest('a, button, input, textarea, select')) return;
+        openCard();
+      });
+
+      card.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          openCard();
+        }
+      });
+    });
+  }
+  initPortfolioCards();
+
+  /**
    * Init isotope layout and filters
    */
   document.querySelectorAll('.isotope-layout').forEach(function(isotopeItem) {
